@@ -269,9 +269,9 @@ MIT License - Feel free to use for research and commercial projects
 ---
 
 ## 👨‍💻 Author
+Nguyễn Văn An-D22CQAT001
 
-Created with Claude Code (Claude Sonnet 4.5)
-Optimized: 2025-12-10
+
 
 ---
 
