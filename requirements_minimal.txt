@@ -1,0 +1,19 @@
+# Minimal Multi-Layer IDS Requirements
+# For training and testing only
+
+# Core ML
+tensorflow>=2.10.0
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=1.0.0
+
+# Model persistence
+joblib>=1.1.0
+
+# Visualization (optional, for training plots)
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# For dashboard and visualization
+streamlit>=1.20.0
+plotly>=5.10.0

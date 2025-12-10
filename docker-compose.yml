@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Main IDS Dashboard
+  ids-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zero-day-iot-ids
+    ports:
+      - "8501:8501"  # Streamlit dashboard
+    volumes:
+      # Mount models directory (in case you retrain)
+      - ./models:/app/models:ro
+      # Mount logs directory (optional)
+      - ./logs:/app/logs
+    environment:
+      - TF_CPP_MIN_LOG_LEVEL=3
+      - TF_ENABLE_ONEDNN_OPTS=0
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ids-network
+
+  # Optional: Add a simple web server for static files (if needed)
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: ids-nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #   networks:
+  #     - ids-network
+  #   depends_on:
+  #     - ids-dashboard
+
+networks:
+  ids-network:
+    driver: bridge
+
+volumes:
+  models-data:
+  logs-data:

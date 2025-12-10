@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Documentation (except essential ones)
+*.md
+!README.md
+
+# Logs and temp files
+*.log
+logs/*.log
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test outputs
+test_results/
+*.png
+*.jpg
+plots/
+
+# Unnecessary data (keep only essential datasets)
+data/**/*.csv
+!data/Train_Test_datasets/**/*.csv
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
