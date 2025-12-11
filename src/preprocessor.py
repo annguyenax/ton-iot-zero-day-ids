@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
 
-def preprocess_data(df, label_col='label', zero_day_attacks=['ransomware', 'mitm', 'injection']):
+def preprocess_data(df, label_col='label', zero_day_attacks=['ransomware', 'mitm', 'injection'], return_encoders=True):
     """
     Preprocess dataset for zero-day scenario
 
@@ -17,12 +17,14 @@ def preprocess_data(df, label_col='label', zero_day_attacks=['ransomware', 'mitm
         df: DataFrame
         label_col: name of label column
         zero_day_attacks: list of attack types to treat as zero-day (not in training)
+        return_encoders: whether to return encoders for reproducibility (default: True)
 
     Returns:
         X: Feature matrix
         y_attack: Binary labels (0=normal, 1=attack)
         y_zero_day: Zero-day flags
         y_labels: Original labels
+        encoders: Dictionary of LabelEncoders for each categorical column (if return_encoders=True)
     """
     print("\n" + "="*60)
     print("DATA PREPROCESSING")
@@ -91,11 +93,30 @@ def preprocess_data(df, label_col='label', zero_day_attacks=['ransomware', 'mitm
     print("[3/7] Encoding categorical features...")
     categorical_cols = X.select_dtypes(include=['object']).columns
 
+    # Dictionary to store encoders for reproducibility
+    encoders = {}
+
     for col in categorical_cols:
         if X[col].nunique() < 100:  # If few categories
             le = LabelEncoder()
-            X[col] = le.fit_transform(X[col].astype(str))
+
+            # CRITICAL: Sort unique values before encoding for deterministic behavior
+            # This ensures consistent encoding across different runs
+            unique_values = sorted(X[col].astype(str).unique())
+
+            # Fit encoder on sorted values
+            le.fit(unique_values)
+
+            # Transform the column
+            X[col] = le.transform(X[col].astype(str))
+
+            # Save encoder for reproducibility
+            if return_encoders:
+                encoders[col] = le
+
+            print(f"  Encoded '{col}': {len(unique_values)} unique values")
         else:
+            print(f"  Dropped '{col}': too many unique values ({X[col].nunique()})")
             X = X.drop(columns=[col])  # Drop if too many categories
 
     # 4. Convert all to numeric
@@ -114,7 +135,10 @@ def preprocess_data(df, label_col='label', zero_day_attacks=['ransomware', 'mitm
 
     print(f"[7/7] Final feature count: {X.shape[1]}")
 
-    return X, df['is_attack'], df['is_zero_day'], y_labels
+    if return_encoders:
+        return X, df['is_attack'], df['is_zero_day'], y_labels, encoders
+    else:
+        return X, df['is_attack'], df['is_zero_day'], y_labels
 
 
 # REMOVED: create_zero_day_split() function

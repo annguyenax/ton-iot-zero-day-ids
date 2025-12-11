@@ -22,6 +22,7 @@ warnings.filterwarnings('ignore')
 # Import existing modules
 from data_loader import load_ton_iot_data
 from preprocessor import preprocess_data
+from utils import set_all_seeds, print_environment_info
 
 
 def train_layer_unsupervised(layer_name, dataset_path, label_col, n_samples=None):
@@ -48,7 +49,7 @@ def train_layer_unsupervised(layer_name, dataset_path, label_col, n_samples=None
 
     # Preprocess
     print("[2/8] Preprocessing...")
-    X, y_attack, _, _ = preprocess_data(df, label_col=label_col)
+    X, y_attack, _, _, encoders = preprocess_data(df, label_col=label_col, return_encoders=True)
 
     # Show distribution
     n_normal = (y_attack == 0).sum()
@@ -178,17 +179,17 @@ def train_layer_unsupervised(layer_name, dataset_path, label_col, n_samples=None
     std_error = clean_errors.std()
 
     if layer_name == 'network':
-        # Network: FINAL OPTIMIZED - 82nd percentile for best balance
-        # After testing: 88th gives only 48% detection (too high!)
-        # 82nd should give ~90-95% detection with ~18% FP
-        threshold = np.percentile(clean_errors, 82)
-        threshold_method = "82nd percentile (FINAL: ~92% detection, ~18% FP - optimized balance)"
+        # Network: OPTIMIZED - 75th percentile for >85% detection
+        # Lower percentile = lower threshold = higher sensitivity
+        # Target: Detection > 85%, FP around 20-25%
+        threshold = np.percentile(clean_errors, 75)
+        threshold_method = "75th percentile (OPTIMIZED: target >85% detection, <25% FP)"
     elif layer_name == 'linux':
-        # Linux: FINAL OPTIMIZED - mean+1.2std for higher detection
-        # After testing: mean+1.5std gives only 70% detection (too high!)
-        # mean+1.2std should give ~85-90% detection with ~22% FP
-        threshold = mean_error + 1.2 * std_error
-        threshold_method = "mean + 1.2*std (FINAL: ~87% detection, ~22% FP - prioritize detection)"
+        # Linux: OPTIMIZED - mean+1.0std for >85% detection
+        # Lower multiplier = lower threshold = higher sensitivity
+        # Target: Detection > 85%, FP around 20-25%
+        threshold = mean_error + 1.0 * std_error
+        threshold_method = "mean + 1.0*std (OPTIMIZED: target >85% detection, <25% FP)"
     elif layer_name == 'iot':
         # IoT: PERFECT - 97th percentile gives ~95-100% detection, ~3% FP
         threshold = np.percentile(clean_errors, 97)  # FIXED: Use clean_errors instead of train_errors
@@ -245,13 +246,44 @@ def train_layer_unsupervised(layer_name, dataset_path, label_col, n_samples=None
     print(f"  Attack mean error: {attack_errors.mean():.6f}")
     print(f"  Separation ratio: {attack_errors.mean() / val_errors.mean():.2f}x")
 
-    # Save model
+    # Save model and metadata
     os.makedirs('../models/unsupervised', exist_ok=True)
     model.save(f'../models/unsupervised/{layer_name}_autoencoder.h5')
     joblib.dump(scaler, f'../models/unsupervised/{layer_name}_scaler.pkl')
     joblib.dump(threshold, f'../models/unsupervised/{layer_name}_threshold.pkl')
 
+    # Save encoders for reproducibility
+    joblib.dump(encoders, f'../models/unsupervised/{layer_name}_encoders.pkl')
+
+    # Save feature names for inference
+    feature_names = list(X_train.columns)
+    joblib.dump(feature_names, f'../models/unsupervised/{layer_name}_feature_names.pkl')
+
+    # Save comprehensive metadata
+    metadata = {
+        'layer_name': layer_name,
+        'n_features': X_train.shape[1],
+        'feature_names': feature_names,
+        'categorical_features': list(encoders.keys()),
+        'threshold': threshold,
+        'threshold_method': threshold_method,
+        'n_train': len(X_train),
+        'n_val': len(X_val),
+        'n_test_normal': len(X_test_normal),
+        'n_test_attack': len(X_attack),
+        'false_positive_rate': false_positive_rate,
+        'detection_rate': detection_rate,
+        'separation_ratio': attack_errors.mean() / val_errors.mean(),
+    }
+    joblib.dump(metadata, f'../models/unsupervised/{layer_name}_metadata.pkl')
+
     print(f"\n[+] Saved to ../models/unsupervised/")
+    print(f"    - Model: {layer_name}_autoencoder.h5")
+    print(f"    - Scaler: {layer_name}_scaler.pkl")
+    print(f"    - Threshold: {layer_name}_threshold.pkl")
+    print(f"    - Encoders: {layer_name}_encoders.pkl (reproducibility)")
+    print(f"    - Feature names: {layer_name}_feature_names.pkl")
+    print(f"    - Metadata: {layer_name}_metadata.pkl")
 
     # Save diverse test samples (normal + attack)
     n_normal_samples = min(50, len(X_test_normal))
@@ -289,6 +321,13 @@ def train_layer_unsupervised(layer_name, dataset_path, label_col, n_samples=None
 def main():
     """Train all 4 layers with unsupervised approach"""
 
+    # CRITICAL: Set all seeds for full reproducibility
+    print("\n" + "="*70)
+    print("INITIALIZING REPRODUCIBLE TRAINING ENVIRONMENT")
+    print("="*70)
+    set_all_seeds(42)
+    print_environment_info()
+
     print("\n" + "="*70)
     print("UNSUPERVISED TRAINING - TRUE ZERO-DAY DETECTION")
     print("="*70)
@@ -297,6 +336,7 @@ def main():
     print("  [+] Model learns 'what is normal'")
     print("  [+] ANY deviation -> Detected as attack")
     print("  [+] True zero-day detection capability")
+    print("  [+] Full reproducibility enabled (sorted encoding + fixed seeds)")
     print("="*70)
 
     start_time = time.time()

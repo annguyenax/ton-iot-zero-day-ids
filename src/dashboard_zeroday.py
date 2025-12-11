@@ -427,7 +427,7 @@ def main():
                                 st.plotly_chart(
                                     create_gauge_chart(result['confidence'], layer.upper(), 70),
                                     width='stretch',
-                                    key=f"gauge_{layer}_{len(st.session_state.packet_history)}"
+                                    key=f"gauge_{layer}_{idx}_{packet_num}"
                                 )
 
                 # Alert
@@ -496,8 +496,12 @@ def main():
             if st.button("🔍 Run Detection"):
                 with st.spinner("Analyzing..."):
                     try:
-                        # Preprocess
-                        X, y_attack, _, _ = preprocess_data(df, label_col='type' if 'type' in df.columns else 'label' if 'label' in df.columns else None)
+                        # Preprocess (return_encoders=False to keep backward compatibility)
+                        X, y_attack, _, _ = preprocess_data(
+                            df,
+                            label_col='type' if 'type' in df.columns else 'label' if 'label' in df.columns else None,
+                            return_encoders=False
+                        )
 
                         st.success(f"✓ Preprocessed: {X.shape[0]} samples, {X.shape[1]} features")
 

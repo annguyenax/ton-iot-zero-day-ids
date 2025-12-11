@@ -1,4 +1,8 @@
+# TON-IoT Zero-Day IDS - Git Ignore File
+
+# ==============================================================================
 # Python
+# ==============================================================================
 __pycache__/
 *.py[cod]
 *$py.class
@@ -16,43 +20,124 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Virtual Environment
-.venv/
+# Virtual environments
+.env
+.venv
+env/
 venv/
 ENV/
-env/
+env.bak/
+venv.bak/
 
-# IDE
-.vscode/
+# PyCharm
 .idea/
+
+# VSCode
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# ==============================================================================
+# Machine Learning / Data Science
+# ==============================================================================
+
+# Trained models (large files)
+models/unsupervised/*.h5
+models/unsupervised/*.keras
+
+# Model artifacts (can be regenerated)
+models/unsupervised/*.pkl
+models/unsupervised/*.npy
+
+# Logs
+logs/
+*.log
+environment_info.txt
+
+# Results
+results/
+outputs/
+
+# ==============================================================================
+# Data Files (TON-IoT datasets - too large for Git)
+# ==============================================================================
+
+# Dataset CSVs - users should download separately
+data/Train_Test_datasets/**/*.csv
+
+# Generated numpy arrays
+data/*.npy
+
+# Keep directory structure but ignore contents
+!data/README.md
+!data/Train_Test_datasets/README.md
+
+# ==============================================================================
+# Documentation (analysis files - not needed in repo)
+# ==============================================================================
+
+# Analysis and internal documentation
+PHÂN_TÍCH_TRAINING_VÀ_DỮ_LIỆU.md
+SO_SÁNH_KẾT_QUẢ_TRAINING.md
+NGUYÊN_NHÂN_VÀ_GIẢI_PHÁP.md
+CV_PROJECT_DESCRIPTION.md
+HOW_TO_USE_PROMPT.md
+PROMPT_FOR_LAB_SETUP.md
+PROJECT_SUMMARY.md
+
+# Old documentation
+FINAL_OPTIMIZATION_SUMMARY.md
+
+# ==============================================================================
+# Archive folder - historical code, not needed
+# ==============================================================================
+archive/
+
+# ==============================================================================
+# OS specific
+# ==============================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# ==============================================================================
+# Temporary files
+# ==============================================================================
+*.tmp
+*.temp
 *.swp
 *.swo
 *~
 
-# Data (don't commit large files)
-data/*.csv
-data/*.npy
-*.csv
-*.npy
+# ==============================================================================
+# Docker
+# ==============================================================================
+*.pid
+*.seed
+*.pid.lock
 
-# Models (don't commit large model files)
-models/*.h5
-models/*.keras
-models/*.pkl
-
-# Results
-results/*.png
-results/*.jpg
-results/*.pdf
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb
+# ==============================================================================
+# Git
+# ==============================================================================
+*.orig
