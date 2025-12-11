@@ -403,7 +403,7 @@ If you use this project in your research, please cite:
 @software{nguyen2024toniot_ids,
   author = {Nguyen, An},
   title = {TON-IoT Zero-Day IDS: Multi-Layer Intrusion Detection with Unsupervised Learning},
-  year = {2024},
+  year = {2025},
   url = {https://github.com/annguyenax/ton-iot-zero-day-ids}
 }
 ```
@@ -421,17 +421,6 @@ If you use this project in your research, please cite:
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
 
 ## 📄 License
 
@@ -453,10 +442,7 @@ Nguyễn Văn An-D22CQAT001
 
 
 ## 📞 Support & Contact
-
-- **Issues:** https://github.com/annguyenax/ton-iot-zero-day-ids/issues
-- **Discussions:** https://github.com/annguyenax/ton-iot-zero-day-ids/discussions
-- **Email:** [Your email if you want to include]
+- **Email:** [annguyen11012k4@gmail.com]
 
 ---
 
