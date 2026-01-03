@@ -395,18 +395,7 @@ pytest tests/
 
 ---
 
-## 📚 Citation
 
-If you use this project in your research, please cite:
-
-```bibtex
-@software{nguyen2024toniot_ids,
-  author = {Nguyen, An},
-  title = {TON-IoT Zero-Day IDS: Multi-Layer Intrusion Detection with Unsupervised Learning},
-  year = {2025},
-  url = {https://github.com/annguyenax/ton-iot-zero-day-ids}
-}
-```
 
 **TON-IoT Dataset:**
 ```bibtex
@@ -422,19 +411,7 @@ If you use this project in your research, please cite:
 ---
 
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-
-## 🙏 Acknowledgments
-
-- **UNSW Canberra Cyber** for the TON-IoT dataset
-- **TensorFlow team** for the excellent deep learning framework
-- **Streamlit** for the easy-to-use dashboard framework
-=======
 ## 👨‍💻 Author
 Nguyễn Văn An-D22CQAT001
 
@@ -446,15 +423,4 @@ Nguyễn Văn An-D22CQAT001
 
 ---
 
-## 🗺️ Roadmap
 
-- [ ] Add more IoT protocols (BACnet, DNP3, etc.)
-- [ ] Implement ensemble methods for fusion layer
-- [ ] Add real-time packet capture integration
-- [ ] Publish research paper
-- [ ] Create pre-trained models for download
-- [ ] Add Grafana dashboard for production monitoring
-
----
-
-**Made with ❤️ for IoT Security Research**
