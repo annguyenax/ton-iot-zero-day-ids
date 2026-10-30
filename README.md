@@ -34,7 +34,7 @@
 - ✅ **Zero-day detection** without attack labels
 - ✅ **Multi-layer defense** across network, IoT, and OS layers
 - ✅ **Real-time dashboard** with Streamlit
-- ✅ **Production-ready** with Docker deployment
+- ✅ **Docker Compose deployment** for local/lab use (not hardened for production)
 
 ---
 
