@@ -17,16 +17,18 @@
 
 | Layer | Detection Rate | False Positive | Accuracy | Separation | Features |
 |-------|----------------|----------------|----------|------------|----------|
-| **Network** | 99,80% | 22.00% | 89.00% | 328x | 40 |
+| **Network** | 99.80% | 22.00% | 89.00% | 328x | 40 |
 | **IoT (Modbus)** | 99.5% ✅ | 20.00% ✅ | 90.00% | 33x | 5 |
 | **Linux** | 82.00% | 18.00% | 77.8% | 8x | 12 |
 | **Windows** | 98% ✅ | 4.00% ✅ | 96.6% | 36x | 52 |
-| **AVERAGE** | **95.50%**  | **16.2%** ✅ | **86.6%** ✅ | **101x** | - |
+| **AVERAGE** | **94.8%** | **16.0%** | **88.4%** | **101x** | - |
 
-🎯 **Targets achieved**:
-- ✅ False Positive < 20% (achieved: 16.2%)
-- ✅ Accuracy > 85% (achieved: 86.6%)
-- ✅ Detection > 90% (achieved: 95.50% )
+> Note (2026-10): this row is the arithmetic mean of the four layers above (recomputed 2026-10 after an eval round flagged the old figures as not matching the table). It replaces a previous AVERAGE row that read 95.50% / 16.2% / 86.6% and did not match the table it summarized.
+
+🎯 **Targets achieved** (mean of the 4 layers, see note above):
+- ✅ False Positive < 20% (achieved: 16.0%)
+- ✅ Accuracy > 85% (achieved: 88.4%)
+- Detection: 94.8% mean; per-layer range is 82.0%-99.8%, lowest on Linux
 - ✅ **100% Reproducible** - Same results every time!
 
 ⚡ **Key Features:**
